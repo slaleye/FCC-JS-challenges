@@ -3,7 +3,10 @@ import Editor from "./components/Editor";
 import Preview from "./components/Preview";
 
 const marked = require("marked");
-const inlineCode= '  `const marked = require("marked");` '
+marked.setOptions({
+  breaks: true
+})
+const inlineCode= '`const marked = require("marked");`';
 const codeBlock= '```javascript \n let { initial, output } = this.state;\n ``` '
 
 const initialText = `
@@ -13,12 +16,12 @@ const initialText = `
   ---
   [A link](https://github.com/slaleye)
   ---
-   Inline code :
-   ${inlineCode}
+  <code>hello<code>
+  ${inlineCode}
   ---
   A code block
 
-  ${codeBlock}
+   ${codeBlock}
   ---
   A list item 
 
