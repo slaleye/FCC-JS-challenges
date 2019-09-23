@@ -9,6 +9,7 @@ class Editor extends Component {
     this.updatePreview = this.updatePreview.bind(this);
   }
 
+  // Call UpdatePreview in App.Js with user input
   updatePreview = (e) => {
       this.setState({
         markdown : e.target.value,

@@ -4,9 +4,7 @@ class Preview extends Component {
 
   render() {
     return (
-      <div>
-        <textarea cols="40" rows="10" value={this.props.output} id="preview">{this.props.output}</textarea>
-      </div>
+      <div id="preview" dangerouslySetInnerHTML={{__html : this.props.output}} />
     );
   }
 }
