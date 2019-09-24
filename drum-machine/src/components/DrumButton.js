@@ -1,41 +1,29 @@
 import React, { Component } from "react";
 
-import './DrumButton.css';
-
+import "./DrumButton.css";
 
 class DrumButton extends Component {
   constructor(props) {
     super(props);
+    this.playSound = this.playSound.bind(this);
     this.audioRef = React.createRef();
+
   }
 
-  setAudioButton = button => {
-    this.setState({
-      audioButton: button
-    });
-    // console.log(button);
-  };
   playSound = () => {
-    console.log("pressed");
     const audioButton = this.audioRef.current;
-    audioButton.play();
-    console.log(audioButton);
+    this.props.playMe(audioButton);
   };
 
   render() {
     let { id, text, audioSrc, code } = this.props.drumPad;
 
     return (
-      <li
-        onKeyPress={this.playSound}
-        key={code}
-        alt={text}
-        className="drum-pad"
-        id={id}
-      >
+      <li onClick={this.playSound} key={code} className="drum-pad" id={text}>
         <audio
           className="clip"
           id={id}
+          data-description={text}
           src={audioSrc}
           ref={this.audioRef}
           type="audio/mpeg"
