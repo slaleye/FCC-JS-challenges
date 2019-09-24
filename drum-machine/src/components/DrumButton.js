@@ -1,11 +1,12 @@
 import React, { Component } from "react";
 
+import './DrumButton.css';
+
+
 class DrumButton extends Component {
   constructor(props) {
     super(props);
-    this.state = {
-      audioButton: null
-    };
+    this.audioRef = React.createRef();
   }
 
   setAudioButton = button => {
@@ -15,25 +16,33 @@ class DrumButton extends Component {
     // console.log(button);
   };
   playSound = () => {
-    this.state.button.play();
+    console.log("pressed");
+    const audioButton = this.audioRef.current;
+    audioButton.play();
+    console.log(audioButton);
   };
 
   render() {
     let { id, text, audioSrc, code } = this.props.drumPad;
-    //console.log(code);
+
     return (
-      <li key={code} className="drum-pad" id={id}>
+      <li
+        onKeyPress={this.playSound}
+        key={code}
+        alt={text}
+        className="drum-pad"
+        id={id}
+      >
         <audio
           className="clip"
+          id={id}
           src={audioSrc}
-          ref={this.setAudioButton}
+          ref={this.audioRef}
           type="audio/mpeg"
         >
           Your browser does not support the audio element.
         </audio>
-        <button onKeyPress={this.playSound} alt={text}>
-          {id}
-        </button>
+        {id}
       </li>
     );
   }

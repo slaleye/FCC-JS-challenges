@@ -48,6 +48,13 @@ const drumPads = [{
     audioSrc:'https://s3.amazonaws.com/freecodecamp/drums/RP4_KICK_1.mp3'
 }];
 
+const displayStyle = {
+    display: 'flex',
+    flexWrap: 'wrap',
+    justifyContent: 'space-around',
+    height: '50px'
+}
+
 class Display extends Component {
     constructor(props) {
         super(props);
@@ -57,10 +64,10 @@ class Display extends Component {
           }
          }
     }
+
     render() { 
-        return (<div>
-            <h3>Display</h3>
-            <ul id="display">
+    return (<div>
+            <ul id="display" style={displayStyle}>
             {drumPads.map( (elem) => {
                 return (<DrumButton drumPad={elem}/>)
             } )}
@@ -68,6 +75,8 @@ class Display extends Component {
             </div>
             );
     }
+
+   
 }
  
 export default Display;
