@@ -1,0 +1,26 @@
+.App {
+  text-align: center;
+}
+.btn{
+  margin-right: 5px;
+}
+.number, .decimal {
+  font-size: 70%;
+}
+
+.operator {
+  color:gray;
+  font-size: 200%;
+  font-weight: bolder;
+}
+
+ .clear {
+  color:green;
+  font-weight: bold;
+  font-size: 200%;
+}
+.equal {
+  font-size: 200%;
+  font-weight: bolder;
+  color: orange;
+}
