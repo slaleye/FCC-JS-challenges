@@ -14,24 +14,27 @@ class Setting extends React.Component {
 
   handleIncrement = event => {
     const currValue = this.props.setting.value;
-    const newValue = currValue + 1 > 60 ? currValue : currValue + 1;
+    let newValue = currValue + 1 > 60 ? currValue : currValue + 1;
+    
     this.props.handleUpdateParentState({
       name: this.props.setting.name,
       value: newValue
     });
     if (this.props.hasOwnProperty("handleSessionParent")) {
+      newValue =  newValue < 10 ? "0"+newValue : newValue ;
       this.props.handleSessionParent(newValue);
     }
   };
 
   handleDecrement = event => {
     const currValue = this.props.setting.value;
-    const newValue = currValue - 1 <= 0 ? currValue : currValue - 1;
+    let newValue = currValue - 1 <= 0 ? currValue : currValue - 1;
     this.props.handleUpdateParentState({
         name: this.props.setting.name,
         value: newValue
       });
     if (this.props.hasOwnProperty("handleSessionParent")) {
+      newValue =  newValue < 10 ? "0"+newValue : newValue ;
       this.props.handleSessionParent(newValue);
     }
   };

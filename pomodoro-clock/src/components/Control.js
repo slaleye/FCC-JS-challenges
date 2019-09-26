@@ -16,7 +16,7 @@ class Control extends React.Component {
   }
 
   handleStartStop = event => {
-
+      this.props.handleStartParent();
       this.setState({
           btnText : this.state.btnText === START ? STOP : START,
           btnClass : this.state.btnClass === START_CLASS ? STOP_CLASS : START_CLASS
