@@ -8,30 +8,34 @@ const DECREMENT = "decrement";
 class Setting extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {
-      value: this.props.setting.defaultValue
-    };
-
     this.handleDecrement = this.handleDecrement.bind(this);
     this.handleIncrement = this.handleIncrement.bind(this);
   }
 
   handleIncrement = event => {
-    const currValue = this.state.value;
+    const currValue = this.props.setting.value;
     const newValue = currValue + 1 > 60 ? currValue : currValue + 1;
-    this.setState({
+    this.props.handleUpdateParentState({
+      name: this.props.setting.name,
       value: newValue
     });
+    if (this.props.hasOwnProperty("handleSessionParent")) {
+      this.props.handleSessionParent(newValue);
+    }
   };
 
   handleDecrement = event => {
-    const currValue = this.state.value;
+    const currValue = this.props.setting.value;
     const newValue = currValue - 1 <= 0 ? currValue : currValue - 1;
-    this.setState({
-      value: newValue
-    });
+    this.props.handleUpdateParentState({
+        name: this.props.setting.name,
+        value: newValue
+      });
+    if (this.props.hasOwnProperty("handleSessionParent")) {
+      this.props.handleSessionParent(newValue);
+    }
   };
-  
+
   render() {
     return (
       <div className="col-sm-6">
@@ -60,7 +64,7 @@ class Setting extends React.Component {
                 className="btn btn-secondary"
                 id={(this.props.setting.name + "-" + LENGTH).toLowerCase()}
               >
-                {this.state.value}
+                {this.props.setting.value}
               </span>
               <button
                 type="button"
