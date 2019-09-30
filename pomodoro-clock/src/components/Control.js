@@ -1,33 +1,10 @@
 import React from "react";
 
-const START = "START";
-const STOP = "STOP";
-const START_CLASS = "btn btn-info";
-const STOP_CLASS = "btn btn-secondary";
 class Control extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-        btnText : START,
-        btnClass: START_CLASS,
-    };
-    this.handleStartStop = this.handleStartStop.bind(this);
-    this.handleReset = this.handleReset.bind(this);
-  }
-
-  handleStartStop = event => {
-      this.props.handleStartParent();
-      this.setState({
-          btnText : this.state.btnText === START ? STOP : START,
-          btnClass : this.state.btnClass === START_CLASS ? STOP_CLASS : START_CLASS
-      });
-  };
-
-  handleReset = event => {
-    this.props.handleResetParent();
-  };
-
+ 
+ 
   render() {
+    let { timerIsActive } = this.props;
     return (
         <div className="alert">
 
@@ -38,15 +15,15 @@ class Control extends React.Component {
             >
               <button
                 type="button"
-                onClick={this.handleStartStop}
-                className={this.state.btnClass}
+                onClick={this.props.handlePlayPauseParent}
+                className={ timerIsActive ? "btn btn-secondary" : "btn btn-info"}
                 id="start_stop"
               >
-               {this.state.btnText}
+               { timerIsActive ? "PAUSE" : "START"}
               </button>
               <button
                 type="button"
-                onClick={this.handleReset}
+                onClick={this.props.handleResetParent}
                 className="btn btn-secondary"
                 id="reset"
               >

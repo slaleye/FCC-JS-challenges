@@ -1,59 +1,158 @@
-import React from 'react';
+import React from "react";
 
-import moment from 'moment';
+import moment from "moment";
 
-class Timer extends React.Component {
-  constructor(props){
-    super(props)
+const Header = () => <h1>Pomodoro Clock</h1>;
+
+const SetTimer = ({ type, label, value, handleClick }) => (
+  <div className="SetTimer">
+    <div id={`${type}-label`}>{label}</div>
+    <div className="SetTimer-controls">
+      <button
+        id={`${type}-decrement`}
+        onClick={() => handleClick(false, `${type}Value`)}
+      >
+        &darr;
+      </button>
+      <h1 id={`${type}-length`}>{value}</h1>
+      <button
+        id={`${type}-increment`}
+        onClick={() => handleClick(true, `${type}Value`)}
+      >
+        &uarr;
+      </button>
+    </div>
+  </div>
+);
+
+const Timer = ({ mode, time }) => (
+  <div className="Timer">
+    <h1 id="timer-label">{mode === "session" ? "Session " : "Break "}</h1>
+    <h1 id="time-left">{time}</h1>
+  </div>
+);
+
+const Controls = ({ active, handleReset, handlePlayPause }) => (
+  <div className="Controls">
+    <button id="start_stop" onClick={handlePlayPause}>
+      {active ? <span>&#10074;&#10074;</span> : <span>&#9658;</span>}
+    </button>
+    <button id="reset" onClick={handleReset}>
+      &#8635;
+    </button>
+  </div>
+);
+
+class App extends React.Component {
+  constructor(props) {
+    super(props);
     this.state = {
-      time: 0,
-      start: 0,
-      isOn: false
+      breakValue: 5,
+      sessionValue: 25,
+      time: 25 * 60 * 1000,
+      active: false,
+      mode: "session"
+    };
+  }
+
+  componentDidUpdate(prevProps) {
+    if (this.state.time === 0 && this.state.mode === "session") {
+      this.setState({ time: this.state.breakValue * 60 * 1000, mode: "break" });
+      this.audio.play();
     }
-    this.startTimer = this.startTimer.bind(this)
-    this.stopTimer = this.stopTimer.bind(this)
-    this.resetTimer = this.resetTimer.bind(this)
+    if (this.state.time === 0 && this.state.mode === "break") {
+      this.setState({
+        time: this.state.sessionValue * 60 * 1000,
+        mode: "session"
+      });
+      this.audio.play();
+    }
   }
-  startTimer() {
+
+  handleSetTimers = (inc, type) => {
+    if (inc && this.state[type] === 60) return;
+    if (!inc && this.state[type] === 1) return;
+    this.setState({ [type]: this.state[type] + (inc ? 1 : -1) });
+  };
+
+  handlePlayPause = () => {
+    if (this.state.active) {
+      this.setState({ active: false }, () => clearInterval(this.pomodoro));
+    } else {
+      if (!this.state.touched) {
+        this.setState(
+          {
+            time: this.state.sessionValue * 60 * 1000,
+            active: true,
+            touched: true
+          },
+          () =>
+            (this.pomodoro = setInterval(
+              () => this.setState({ time: this.state.time - 1000 }),
+              1000
+            ))
+        );
+      } else {
+        this.setState(
+          {
+            active: true,
+            touched: true
+          },
+          () =>
+            (this.pomodoro = setInterval(
+              () => this.setState({ time: this.state.time - 1000 }),
+              1000
+            ))
+        );
+      }
+    }
+  };
+
+  handleReset = () => {
     this.setState({
-      time: this.state.time,
-      start: Date.now() - this.state.time,
-      isOn: true
-    })
-    this.timer = setInterval(() => this.setState({
-      time: Date.now() - this.state.start
-    }), 1);
-  }
-  stopTimer() {
-    this.setState({isOn: false})
-    clearInterval(this.timer)
-  }
-  resetTimer() {
-    this.setState({time: 0})
-  }
+      breakValue: 5,
+      sessionValue: 25,
+      time: 25 * 60 * 1000,
+      active: false,
+      mode: "session",
+      touched: false
+    });
+    this.audio.pause();
+    this.audio.currentTime = 0;
+    clearInterval(this.pomodoro);
+  };
+
   render() {
-    let start = (this.state.time === 0) ?
-      <button onClick={this.startTimer}>start</button> :
-      null
-    let stop = (this.state.isOn) ?
-      <button onClick={this.stopTimer}>stop</button> :
-      null
-    let reset = (this.state.time !== 0 && !this.state.isOn) ?
-      <button onClick={this.resetTimer}>reset</button> :
-      null
-    let resume = (this.state.time !== 0 && !this.state.isOn) ?
-      <button onClick={this.startTimer}>resume</button> :
-      null
-    return(
+    return (
       <div>
-        <h3>timer: {moment(this.state.time).format('mm:ss')}</h3>
-        {start}
-        {resume}
-        {stop}
-        {reset}
+        <Header />
+        <div className="settings">
+          <SetTimer
+            type="break"
+            label="Break Length"
+            value={this.state.breakValue}
+            handleClick={this.handleSetTimers}
+          />
+          <SetTimer
+            type="session"
+            label="Session Length"
+            value={this.state.sessionValue}
+            handleClick={this.handleSetTimers}
+          />
+        </div>
+        <Timer
+          mode={this.state.mode}
+          time={moment(this.state.time).format("mm:ss")}
+        />
+        <Controls
+          active={this.state.active}
+          handleReset={this.handleReset}
+          handlePlayPause={this.handlePlayPause}
+        />
+        <audio id="beep" src="" ref={ref => (this.audio = ref)}></audio>
       </div>
-    )
+    );
   }
 }
 
-export default Timer
+export default App;
