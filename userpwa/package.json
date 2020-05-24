@@ -1,0 +1,16 @@
+{
+  "name": "userpwa",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "serve": "http-server -p 1336 build -c-1"
+  },
+  "keywords": [],
+  "author": "Salomon",
+  "license": "ISC",
+  "dependencies": {
+    "g": "^2.0.1",
+    "http-server": "^0.12.3"
+  }
+}
