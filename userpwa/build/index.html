@@ -4,8 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Users PWA</title>
+    <link rel="manifest" href="manifest.json">
     <link rel="stylesheet" href="css/main.css">
-
+    <link href="https://fonts.googleapis.com/css?family=Ubuntu" rel="stylesheet">
 </head>
 <body>
 
@@ -13,7 +14,16 @@
 
     <ul id="peopleList"></ul>
 
+ <script>
+      if ('serviceWorker' in navigator) {
+            window.addEventListener('load', registerServiceWorker)
+        }
 
+        function registerServiceWorker() {
+            navigator.serviceWorker.register('/sw.js');
+            console.log('Service Worker Registered!')
+        }
+ </script>
 <!--     
 If async is present: The script is executed asynchronously with the rest of the page (the script will be executed while the page continues the parsing)
 If async is not present and defer is present: The script is executed when the page has finished parsing
